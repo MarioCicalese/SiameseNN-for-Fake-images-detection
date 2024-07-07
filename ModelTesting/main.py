@@ -27,6 +27,7 @@ print(test_df)
 # Loading the trained model
 model = APN_Model()
 model.efficientnet.conv_stem = nn.Conv2d(1, 32, 3, 2, 1, bias=False)
+model.to(DEVICE)
 model.load_state_dict(torch.load(os.path.join(os.path.dirname(os.getcwd()), "best_model.pt")))
 
 # Unzipping the embeddings database

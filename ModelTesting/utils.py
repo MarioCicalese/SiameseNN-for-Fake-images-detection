@@ -394,7 +394,7 @@ def prediction_fn(data_dir, test_df, currentTest, y_pred, model, database):
     """
 
     # Iterate over each row in the test DataFrame with progress bar
-    for index, row in tqdm(test_df.iterrows(), total=len(test_df)):
+    for index, row in tqdm(test_df.iterrows(), total=len(test_df), desc=f"Calculating prediction on {currentTest} images"):
         # Construct the full image path
         img_name = os.path.join(data_dir, row[currentTest])
         
