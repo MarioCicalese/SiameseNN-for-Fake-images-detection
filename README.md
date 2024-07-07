@@ -37,9 +37,9 @@ Follow these steps to set up the project locally.
 
 ## Running the Application
 Once the environment is set up and activated, you can run the main script from the terminal:
-    ```bash
-    cd ModelTesting
-    python main.py
-
+```bash
+cd ModelTesting
+python main.py
+```
 This script will execute the testing phase of the Siamese Neural Network using the trained model in the project's files.
 
