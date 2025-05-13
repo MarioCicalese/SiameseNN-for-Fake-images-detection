@@ -8,6 +8,29 @@ The frequency domain was chosen because prior research has indicated that **gene
 The images used to train the model were sourced from the **[Artifact Dataset](https://github.com/awsaf49/artifact)**, which comprises a total of **2,496,738 RGB images of size 200×200**, including **964,989 real** and **1,531,749 synthetic samples**. The images span **various domains** such as human faces, animals, landscapes, vehicles, and artworks. The synthetic images were generated using **25 different models**, specifically **13 Generative Adversarial Networks (GANs)**, **7 Diffusion models**, and **5 other generation techniques.**
 
 ## 🏗️ Model Architecture
+To achieve the objectives, a **Siamese Neural Network (SNN)** architecture was employed, consisting of **three Convolutional Neural Networks (CNNs)**. Specifically, the chosen CNN model is **EfficientNetV2-B0**, **the most lightweight variant in the EfficientNetV2 family**.
+
+**The final classification layer of the CNN is removed** to **extract the embedding vectors** (also referred to as encoding vectors) from each input. This step is crucial, as the loss function—in this case, PyTorch's `TripletMarginLoss` — operates by computing the **distances between these vector representations.**
+
+## ⚙️ Training Details
+### 🧪 Triplet Loss and Semi-Hard Triplet Mining
+To optimize the model's learning process, we rely on TripletMarginLoss, which encourages the network to map similar images closer together in the embedding space while pushing dissimilar ones apart. Each training sample consists of a **triplet**: an **anchor**, a **positive (same class)**, and a **negative (different class)**.
+We categorize triplets into:
+- **Easy triplets:** already well-separated, contributing little to learning.
+- **Hard triplets:** overly challenging and may destabilize training.
+- **Semi-hard triplets:** informative samples where the negative is further from the anchor than the positive, but still within a defined margin.
+We apply offline triplet mining by computing embeddings with a pretrained network and selecting only semi-hard triplets using the Euclidean distance and a margin of 0.2. This significantly improves performance by focusing training on the most informative examples while discarding misleading ones.
+
+The model was trained using the following hyperparameters:
+- **Batch size:** 16
+- **Epochs:** 30
+- **Initial Learning Rate:** 0.001
+- **Optimizers:** `Adam` with `ReduceLROnPlateau scheduler`
+  
+**Multiple training runs were conducted to evaluate different triplet selection strategies and model configurations**. A total of **five experiments were performed**, and the model selected for deployment is the one that achieved the best overall performance metrics, as documented in the project report.
+
+## 📊 Results
+The best-performing model was obtained from Test #5. Below are the results from all the experiments:
 
 ## 🛠️ Installation Instructions
 Follow these steps to set up the project locally.
